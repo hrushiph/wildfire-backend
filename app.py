@@ -10,6 +10,9 @@ import io
 import landsatxplore.api
 from dateutil.relativedelta import *
 from flask import send_file
+import base64, re
+from PIL import Image
+import io
 
 
 app = Flask(__name__)
@@ -73,9 +76,15 @@ def getNOAAdata():
 def getDetection():
     print('Detecting the model')
     bytesOfImage = request.get_data()
-    with open('ImageProcessing/image.jpeg', 'wb') as out:
-        out.write(bytesOfImage)
-    return send_file('./veg_firemap.png', mimetype='image/png')
+    print(type(bytesOfImage))
+    print(bytesOfImage)
+    filename = 'ImageProcessing/input.jpeg'
+    with open(filename, "wb") as fh:
+        fh.write(base64.decodebytes(bytesOfImage))
+        
+    
+    return "ok"
+    # return send_file('./veg_firemap.png', mimetype='image/png')
 
 @app.route('/api/getEarthExplorerData', methods=['POST'])
 def getEarthExplorerData():
